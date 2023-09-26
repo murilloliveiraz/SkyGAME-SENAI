@@ -21,6 +21,7 @@ const imagem1URL = "./assets/characters/free_plane_sprite/png/Plane/Fly (1).png"
 const imagem2URL = "./assets/characters/free_plane_sprite/png/Plane/Fly (2).png";
 const tiroImg = './assets/characters/free_plane_sprite/png/Bullet/Bullet (1).png'
 const tiroVilao = './assets/characters/plane_pack/planes/torpedo/torpedo_black.png'
+const explosaoGif = './assets/characters/plane_pack/explosion_effect/explode3.gif'
 let imagemAtual = 1;
 
 //animacao do personagem
@@ -119,7 +120,7 @@ function atirar() {
     tiro.src = tiroVilao;
     tiro.alt = "tiro";
     tiro.classList.add('tirovilao');
-    tiro.id = 'tiro'; 
+    tiro.id = 'tirovilao'; 
     document.body.appendChild(tiro);
   
     // Obtém as coordenadas e dimensões do elemento 'tiro'
@@ -138,6 +139,8 @@ function atirar() {
         if (tiroRect.left > 0) {
           // Move 'tiro' 5 pixels para a esquerda
           tiro.style.left = (parseInt(tiro.style.left) || 0) - 5 + 'px';
+          //console.log(tiro.style.top)
+          //console.log(personagem.style.top)
         } else {
           // Remove 'tiro' e cancela o intervalo quando alcança a borda esquerda
           clearInterval(tiroInterval);
@@ -156,9 +159,47 @@ document.addEventListener('keydown', (e) => {
 });
 
 
+function checkTiroInimigo(){
+  const tiro = document.getElementById('tirovilao'); // Mova esta linha para dentro da função
+  if (!tiro){ return;} // Se o tiro não existir, retorne e não faça nada
 
+  const tiroRect = tiro.getBoundingClientRect();
+  const inimigoRect = personagem.getBoundingClientRect();
+
+  if (
+      tiroRect.left < inimigoRect.right &&
+      tiroRect.right > inimigoRect.left &&
+      tiroRect.top < inimigoRect.bottom &&
+      tiroRect.bottom > inimigoRect.top
+  ){
+      personagem.src = explosaoGif;
+      setTimeout(function(){
+        personagem.remove();
+      }, 1300)
+    }
+}
+
+function checkCollision(){
+  const tiro = document.getElementById('tiro'); // Mova esta linha para dentro da função
+  if (!tiro){ return;} // Se o tiro não existir, retorne e não faça nada
   
+  const tiroRect = tiro.getBoundingClientRect();
+  const inimigoRect = villain.getBoundingClientRect();
   
-  
-  
-  
+  if (
+    tiroRect.left < inimigoRect.right &&
+    tiroRect.right > inimigoRect.left &&
+    tiroRect.top < inimigoRect.bottom &&
+    tiroRect.bottom > inimigoRect.top
+    ) {
+      // villain.src = explosao;
+      villain.remove();
+  }
+}
+
+function checarColisoes(){
+checkCollision();//Colisao entre inimigo e personagem
+checkTiroInimigo();
+}
+
+setInterval(checarColisoes,50);
