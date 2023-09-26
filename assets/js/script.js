@@ -6,8 +6,13 @@ const startedGame = document.querySelector('.startedGame')
 const divPersonagem = document.getElementById('personagem')
 //seleciona o personagem
 const personagem = document.querySelector(".plane");
-const villain = document.querySelector('.vilao')
+const villain = document.querySelector('.vilao');
+const villainImg = document.querySelector('.vilaoimg');
 const game = document.querySelector(".game")
+let vidasDoPersonagem = 3; 
+const vida1 = document.getElementById('vida1');
+const vida2 = document.getElementById('vida2');
+const vida3 = document.getElementById('vida3');
 
 //monitora o click no botao start e inicia o jogo
 startButton.addEventListener('click', ()=> {
@@ -139,8 +144,6 @@ function atirar() {
         if (tiroRect.left > 0) {
           // Move 'tiro' 5 pixels para a esquerda
           tiro.style.left = (parseInt(tiro.style.left) || 0) - 5 + 'px';
-          //console.log(tiro.style.top)
-          //console.log(personagem.style.top)
         } else {
           // Remove 'tiro' e cancela o intervalo quando alcança a borda esquerda
           clearInterval(tiroInterval);
@@ -172,11 +175,26 @@ function checkTiroInimigo(){
       tiroRect.top < inimigoRect.bottom &&
       tiroRect.bottom > inimigoRect.top
   ){
+    document.body.removeChild(tiro);
+    vidasDoPersonagem = vidasDoPersonagem - 1;
+    diminuiVidas(vidasDoPersonagem);
+    if(vidasDoPersonagem <= 0){
       personagem.src = explosaoGif;
-      setTimeout(function(){
+      vida1.style.display = "none";
+      setTimeout(function() {
         personagem.remove();
-      }, 1300)
+      }, 1000)
     }
+    }
+}
+
+function diminuiVidas(vidas) {
+  if(vidasDoPersonagem == 2){
+    vida3.style.display = "none";
+  }
+  if(vidasDoPersonagem == 1){
+    vida2.style.display = "none";
+  }
 }
 
 function checkCollision(){
@@ -192,8 +210,11 @@ function checkCollision(){
     tiroRect.top < inimigoRect.bottom &&
     tiroRect.bottom > inimigoRect.top
     ) {
-      // villain.src = explosao;
-      villain.remove();
+      villainImg.src = explosaoGif;
+      document.body.removeChild(tiro);
+      setTimeout(function() {
+        villain.remove();
+      }, 1000)
   }
 }
 
