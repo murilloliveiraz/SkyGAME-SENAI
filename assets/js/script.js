@@ -18,11 +18,11 @@ const vida3 = document.getElementById('vida3');
 startButton.addEventListener('click', ()=> {
     startButton.style.display = 'none'
     startedGame.style.display = 'flex'
-    //faz o vilao atirar a cada 2.5s
-    setInterval(atirarVilao, 2500)
-})
+  })
+  //faz o vilao atirar a cada 2.5s
+  setInterval(atirarVilao, 2500)
 
-const imagem1URL = "./assets/characters/free_plane_sprite/png/Plane/Fly (1).png";
+const imagem1URL = "./assets/characters/plane_pack/planes/plane_3/plane_3_green.png";
 const imagem2URL = "./assets/characters/free_plane_sprite/png/Plane/Fly (2).png";
 const tiroImg = './assets/characters/free_plane_sprite/png/Bullet/Bullet (1).png'
 const tiroVilao = './assets/characters/plane_pack/planes/torpedo/torpedo_black.png'
@@ -30,23 +30,23 @@ const explosaoGif = './assets/characters/plane_pack/explosion_effect/explode3.gi
 let imagemAtual = 1;
 
 //animacao do personagem
-function trocarImagem() {
-  if (imagemAtual === 1) {
-    personagem.src = imagem2URL;
-    personagem.alt = "Imagem 2";
-    imagemAtual = 2;
-  } else {
+// function trocarImagem() {
+//   if (imagemAtual === 1) {
+//     personagem.src = imagem2URL;
+//     personagem.alt = "Imagem 2";
+//     imagemAtual = 2;
+//   } else {
     personagem.src = imagem1URL;
-    personagem.alt = "Imagem 1";
-    imagemAtual = 1;
-  }
-}
+//     personagem.alt = "Imagem 1";
+//     imagemAtual = 1;
+//   }
+// }
 
 // Define o intervalo para trocar a imagem do personagem a cada 2 segundos (2000 milissegundos)
-setInterval(trocarImagem, 500);
+// setInterval(trocarImagem, 500);
 
 //posicao que é deslocada a cada movimento do personagem
-const step = 30;
+const step = 50;
 //posicao que é deslocada a cada movimento do vilao
 const villainStep = 30;
 //posicao inicial
@@ -110,7 +110,7 @@ function atirar() {
         // Verifica se 'tiro' não alcançou a borda direita da tela
         if (tiroRect.right < window.innerWidth) {
           // Move 'tiro' 10 pixels para a direita
-          tiro.style.left = (parseInt(tiro.style.left) || 0) + 10 + 'px';
+          tiro.style.left = (parseInt(tiro.style.left) || 0) + 12 + 'px';
         } else {
           // Remove 'tiro' e cancela o intervalo quando alcança a borda direita
           clearInterval(tiroInterval);
@@ -143,7 +143,7 @@ function atirar() {
         // Verifica se 'tiro' não alcançou a borda esquerda da tela
         if (tiroRect.left > 0) {
           // Move 'tiro' 5 pixels para a esquerda
-          tiro.style.left = (parseInt(tiro.style.left) || 0) - 5 + 'px';
+          tiro.style.left = (parseInt(tiro.style.left) || 0) - 8 + 'px';
         } else {
           // Remove 'tiro' e cancela o intervalo quando alcança a borda esquerda
           clearInterval(tiroInterval);
@@ -184,6 +184,9 @@ function checkTiroInimigo(){
       setTimeout(function() {
         personagem.remove();
       }, 1000)
+      setTimeout(function(){
+        gameOver();
+      }, 1200)
     }
     }
 }
@@ -224,3 +227,23 @@ checkTiroInimigo();
 }
 
 setInterval(checarColisoes,50);
+
+function gameOver(){
+  startedGame.style.display = 'none';
+  const h1 = document.createElement('h1');
+  h1.innerText = "GAME OVER"
+  const game = document.querySelector('.game');
+  h1.style.position = 'absolute';
+  h1.style.top = '50%';
+  const p = document.createElement('p')
+  p.innerText = "o jogo vai reiniciar em 5s"
+  p.style.position = 'absolute';
+  p.style.top = '54%';
+
+  setTimeout(function(){
+    window.location.reload();
+  }, 4000)
+
+  game.appendChild(h1);
+  game.appendChild(p);
+}
